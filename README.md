@@ -1,4 +1,4 @@
-# COMPANY — Event Announcement Pages
+cp halloween.html index.html # COMPANY — Event Announcement Pages
 
 Pure front-end. No build step, no backend, no npm install.
 
