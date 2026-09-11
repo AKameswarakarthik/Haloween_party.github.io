@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>COMPANY — Halloween Night</title>
+<meta name="description" content="Something wicked this way comes. A Halloween event announcement." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Creepster&family=Rubik:wght@400;600;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/halloween.css" />
+</head>
+<body>
+
+  <!-- ============ 3D HERO CANVAS (fixed, scroll driven) ============ -->
+  <canvas id="hero-canvas" aria-hidden="true"></canvas>
+  <div class="vignette" aria-hidden="true"></div>
+
+  <!-- ============ HANGING GHOSTS ============ -->
+  <svg class="svg-defs" aria-hidden="true" focusable="false">
+    <symbol id="ghost-shape" viewBox="0 0 100 124">
+      <path fill="var(--ghost)"
+            d="M8 54 a42 42 0 0 1 84 0 V106 l-14 12 -14 -12 -14 12 -14 -12 -14 12 -14 -12 Z"/>
+      <ellipse fill="var(--ink-2)" cx="35" cy="58" rx="8"   ry="11"/>
+      <ellipse fill="var(--ink-2)" cx="65" cy="58" rx="8"   ry="11"/>
+      <ellipse fill="var(--ink-2)" cx="50" cy="88" rx="6.5" ry="9.5"/>
+    </symbol>
+  </svg>
+  <div class="ghosts ghosts--left" aria-hidden="true">
+    <div class="ghost-hang" style="--len:26vh; --delay:0s;   --dur:5.2s; --size:74px;"><svg class="ghost-hang__body"><use href="#ghost-shape"/></svg></div>
+    <div class="ghost-hang" style="--len:46vh; --delay:-1.4s;--dur:6.4s; --size:96px;"><svg class="ghost-hang__body"><use href="#ghost-shape"/></svg></div>
+    <div class="ghost-hang" style="--len:66vh; --delay:-2.8s;--dur:4.6s; --size:58px;"><svg class="ghost-hang__body"><use href="#ghost-shape"/></svg></div>
+  </div>
+  <div class="ghosts ghosts--right" aria-hidden="true">
+    <div class="ghost-hang" style="--len:14vh; --delay:-0.8s;--dur:5.8s; --size:88px;"><svg class="ghost-hang__body"><use href="#ghost-shape"/></svg></div>
+    <div class="ghost-hang" style="--len:38vh; --delay:-2.1s;--dur:4.9s; --size:62px;"><svg class="ghost-hang__body"><use href="#ghost-shape"/></svg></div>
+    <div class="ghost-hang" style="--len:58vh; --delay:-3.5s;--dur:6.9s; --size:80px;"><svg class="ghost-hang__body"><use href="#ghost-shape"/></svg></div>
+  </div>
+
+  <!-- ============ FIXED UI OVERLAY ============ -->
+  <header class="brand">
+    <span class="brand__mark" aria-hidden="true"></span>
+    <h1 class="brand__name">COMPANY</h1>
+    <p class="brand__sub">presents · Halloween Night</p>
+  </header>
+
+  <div class="stage-copy" id="stage-copy">
+    <p class="eyebrow" id="eyebrow">Oct 31 · Dusk till Dawn</p>
+    <h2 class="coming" id="coming">COMING SOON</h2>
+    <p class="tagline" id="tagline">the lantern is still asleep…</p>
+  </div>
+
+  <div class="scroll-hint" id="scroll-hint">
+    <span>scroll to wake it</span>
+    <i class="scroll-hint__arrow" aria-hidden="true"></i>
+  </div>
+
+  <!-- ============ SCROLL TRACK (gives the page its length) ============ -->
+  <main class="scroll-track" aria-label="Halloween event announcement">
+    <section class="scene-step"><h3 class="sr-only">The lantern sleeps</h3></section>
+    <section class="scene-step"><h3 class="sr-only">The lantern wakes</h3></section>
+    <section class="scene-step"><h3 class="sr-only">It turns away</h3></section>
+    <section class="scene-step"><h3 class="sr-only">The chase begins</h3></section>
+  </main>
+
+  <!-- ============ GAME LAYER ============ -->
+  <section class="game-layer" id="game-layer" aria-label="Pumpkin Run mini game">
+    <canvas id="game-canvas"></canvas>
+
+    <div class="game-hud">
+      <div class="hud-pill"><span class="hud-label">SCORE</span><b id="hud-score">0</b></div>
+      <div class="hud-pill"><span class="hud-label">CANDY</span><b id="hud-candy">0</b></div>
+      <div class="hud-pill hud-pill--danger"><span class="hud-label">GHOST</span><b id="hud-ghost">SAFE</b></div>
+      <button class="hud-exit" id="btn-exit" type="button">✕ leave the woods</button>
+    </div>
+
+    <div class="warn" id="warn" aria-hidden="true">
+      <div class="warn__bang">!</div>
+      <div class="warn__text">GHOST AHEAD — DODGE!</div>
+    </div>
+
+    <div class="game-overlay" id="game-start">
+      <h3 class="game-title">PUMPKIN RUN</h3>
+      <p class="game-sub">Don't let it catch you.</p>
+      <div class="keys">
+        <div class="key-row"><kbd>←</kbd><kbd>→</kbd><span>switch lane</span></div>
+        <div class="key-row"><kbd>↑</kbd><kbd>space</kbd><span>jump the fire</span></div>
+        <div class="key-row"><kbd>↓</kbd><span>slide under webs</span></div>
+        <div class="key-row key-row--touch"><span>…or swipe anywhere</span></div>
+      </div>
+      <button class="btn-glow" id="btn-play" type="button">RUN</button>
+    </div>
+
+    <div class="game-overlay game-overlay--dead" id="game-over">
+      <h3 class="game-title game-title--dead">SMASHED!</h3>
+      <p class="game-sub">The ghost got your head. Rude.</p>
+      <div class="final">
+        <div><span>SCORE</span><b id="final-score">0</b></div>
+        <div><span>CANDY</span><b id="final-candy">0</b></div>
+        <div><span>BEST</span><b id="final-best">0</b></div>
+      </div>
+      <button class="btn-glow" id="btn-retry" type="button">RUN AGAIN</button>
+    </div>
+
+    <div class="touch-hint" id="touch-hint" aria-hidden="true">swipe ↑ ↓ ← →</div>
+  </section>
+
+  <noscript>
+    <div class="noscript">This announcement needs JavaScript for the 3D lantern and the mini game.</div>
+  </noscript>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="js/pumpkin.js"></script>
+  <script src="js/hero.js"></script>
+  <script src="js/game.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
